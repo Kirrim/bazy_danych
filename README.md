@@ -1,17 +1,17 @@
 <h2>#LAB 3</h2>
-#Zadanie 4
-#punkt 1
+#Zadanie 4 <br>
+#punkt 1 <br>
 CREATE TABLE przetwory(id_przetworu INT AUTO_INCREMENT PRIMARY KEY ,rok_produkcji VARCHAR(6) DEFAULT '1654',id_wykonawcy INT , FOREIGN KEY(id_wykonawcy) REFERENCES postac(id_postaci),zawartosc VARCHAR(40),dodatek VARCHAR(40) DEFAULT 'papryczka chilli',id_konsumenta INT,FOREIGN KEY(id_konsumenta) REFERENCES postac(id_postaci)   )
 #Zadanie 4
 #punkt 1
 INSERT INTO  przetwory values(NULL,2000,3,'bigos',DEFAULT,1);
 #Zadanie 5 
 #punkt 1
-INSERT INTO postac values(NULL,'Orgrim','wiking','1100-02-03',20);
-INSERT INTO postac values(NULL,'Mjorn','wiking','1104-01-15',22);
-INSERT INTO postac values(NULL,'Korn','wiking','1103-05-23',23);
-INSERT INTO postac values(NULL,'Born','wiking','1102-06-13',22);
-INSERT INTO postac values(NULL,'Dorn','wiking','1101-07-22',21);
+INSERT INTO postac values(NULL,'Orgrim','wiking','1100-02-03',20);<br>
+INSERT INTO postac values(NULL,'Mjorn','wiking','1104-01-15',22);<br>
+INSERT INTO postac values(NULL,'Korn','wiking','1103-05-23',23);<br>
+INSERT INTO postac values(NULL,'Born','wiking','1102-06-13',22);<br>
+INSERT INTO postac values(NULL,'Dorn','wiking','1101-07-22',21);<br>
 #Zadanie 5 
 #punkt 2
 CREATE TABLE statek(nazwa_statku VARCHAR(50) PRIMARY KEY,rodzaj_statku enum('drakkar','barka','galera'), data_wodowania  date,max_ladownosc INT UNSIGNED);

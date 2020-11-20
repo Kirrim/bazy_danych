@@ -144,3 +144,29 @@ SELECT nazwa, 0.3*waga AS odpad, 0.7*waga AS jedzenie FROM zasob WHERE rodzaj="j
 SELECT rodzaj FROM zasob WHERE rodzaj IS NULL;
 #punkt 3
 SELECT DISTINCT(rodzaj),nazwa FROM zasob WHERE nazwa LIKE 'Ba%' OR nazwa LIKE '%os' ORDER BY nazwa ASC;
+#LAB 6
+#Zadanie 1 
+#punkt 1
+SELECT AVG(waga)  FROM kreatura where rodzaj='wiking';
+#punkt 2 
+SELECT AVG(waga),count(rodzaj),rodzaj FROM kreatura GROUP BY rodzaj;
+#punkt 3
+SELECT AVG(Year(dataUr)),rodzaj FROM kreatura GROUP BY rodzaj;
+#Zadanie 2
+#punkt 1 
+SELECT SUM(waga),rodzaj FROM zasob GROUP by rodzaj;
+#punkt 2
+SELECT AVG(waga),rodzaj FROM zasob  GROUP BY rodzaj HAVING SUM(waga)>10 AND SUM(ilosc)>=4; 
+#punkt 3 
+SELECT COUNT(DISTINCT(nazwa)),rodzaj FROM zasob where ilosc>1 GROUP BY rodzaj;
+#Zadanie 3
+#punkt 1
+SELECT (kreatura.nazwa),SUM(ekwipunek.ilosc) FROM kreatura,ekwipunek where kreatura.Idkreatury=ekwipunek.Idkreatury GROUP BY nazwa;
+Lub
+SELECT (kreatura.nazwa),SUM(ekwipunek.ilosc) FROM kreatura INNER JOIN ekwipunek ON kreatura.Idkreatury=ekwipunek.Idkreatury GROUP BY nazwa;
+#punkt 2   
+SELECT kreatura.nazwa,zasob.nazwa from kreatura,ekwipunek,zasob where kreatura.Idkreatury=ekwipunek.Idkreatury AND ekwipunek.idzasobu=zasob.idzasobu ORDER BY kreatura.nazwa;
+Lub
+SELECT kreatura.nazwa,zasob.nazwa from kreatura INNER JOIN ekwipunek ON kreatura.Idkreatury=ekwipunek.Idkreatury  INNER JOIN zasob ON ekwipunek.idzasobu=zasob.idzasobu ORDER BY kreatura.nazwa;
+#punkt 3 
+SELECT kreatura.nazwa,kreatura.Idkreatury,ekwipunek.Idkreatury FROM kreatura LEFT JOIN ekwipunek ON kreatura.Idkreatury=ekwipunek.Idkreatury where ekwipunek.Idkreatury IS NULL;

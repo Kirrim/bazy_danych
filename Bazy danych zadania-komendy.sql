@@ -169,4 +169,35 @@ SELECT kreatura.nazwa,zasob.nazwa from kreatura,ekwipunek,zasob where kreatura.I
 Lub
 SELECT kreatura.nazwa,zasob.nazwa from kreatura INNER JOIN ekwipunek ON kreatura.Idkreatury=ekwipunek.Idkreatury  INNER JOIN zasob ON ekwipunek.idzasobu=zasob.idzasobu ORDER BY kreatura.nazwa;
 #punkt 3 
+SELECT Idkreatury FROM kreatura WHERE Idkreatury NOT IN (SELECT DISTINCT Idkreatury FROM ekwipunek WHERE Idkreatury IS NOT NULL);
+Lub
 SELECT kreatura.nazwa,kreatura.Idkreatury,ekwipunek.Idkreatury FROM kreatura LEFT JOIN ekwipunek ON kreatura.Idkreatury=ekwipunek.Idkreatury where ekwipunek.Idkreatury IS NULL;
+#Zadanie 4
+#punkt 1
+SELECT kreatura.nazwa,zasob.nazwa FROM kreatura NATURAL JOIN ekwipunek INNER JOIN zasob ON zasob.idzasobu = ekwipunek.idzasobu WHERE YEAR(kreatura.dataUr) BETWEEN 1670 AND 1679 AND kreatura.rodzaj='wiking'; 
+#punkt 2
+Select kreatura.nazwa,zasob.nazwa from kreatura NATURAL JOIN ekwipunek INNER JOIN zasob ON zasob.idzasobu = ekwipunek.idzasobu WHERE zasob.rodzaj='jedzenie' ORDER BY kreatura.dataUr DESC LIMIT 5;
+#punkt 3 
+SELECT CONCAT(T2.nazwa,"-",T1.nazwa) FROM kreatura T1 , kreatura T2 WHERE ABS(T1.Idkreatury-T2.Idkreatury=5) ;
+#Zadanie 5 
+#punkt 1
+SELECT  AVG(ekwipunek.ilosc*zasob.waga),kreatura.rodzaj FROM kreatura,zasob,ekwipunek where kreatura.Idkreatury=ekwipunek.Idkreatury AND ekwipunek.idzasobu=zasob.idzasobu AND kreatura.rodzaj!='malpa' AND kreatura.rodzaj!='waz' GROUP BY kreatura.rodzaj HAVING SUM(ekwipunek.ilosc)<30;
+#punkt 2
+SELECT kreatura.rodzaj,kreatura.nazwa,kreatura.dataUr FROM kreatura,zasob,ekwipunek
+#LAB 7 
+#Zadanie 1
+#punkt 1
+CREATE TABLE kreatura2 SELECT * FROM wikingowie.kreatura;
+CREATE TABLE uczestnicy2 SELECT * FROM wikingowie.uczestnicy;
+CREATE TABLE etapy_wyprawy2 SELECT * FROM wikingowie.etapy_wyprawy;
+CREATE TABLE sektor2 SELECT * FROM wikingowie.sektor;
+CREATE TABLE wyprawa2 Select * form wikingowie.wyprawa
+#punkt 2 
+SELECT kreatura.nazwa ,uczestnicy.id_uczestnika FROM kreatura LEFT JOIN uczestnicy ON uczestnicy.id_uczestnika=kreatura.Idkreatury where uczestnicy.id_uczestnika IS NULL;
+#punkt 3 
+SELECT wyprawa.nazwa,SUM(ekwipunek.ilosc) FROM wyprawa  INNER JOIN uczestnicy ON uczestnicy.id_wyprawy=wyprawa.id_wyprawy INNER JOIN kreatura ON uczestnicy.id_uczestnika=kreatura.IdKreatury INNER JOIN ekwipunek ON ekwipunek.Idkreatury=kreatura.Idkreatury GROUP BY wyprawa.nazwa; 
+Lub
+SELECT wyprawa.nazwa,SUM(ekwipunek.ilosc) FROM wyprawa,uczestnicy,ekwipunek,kreatura WHERE wyprawa.id_wyprawy=uczestnicy.id_wyprawy AND uczestnicy.id_uczestnika=kreatura.Idkreatury AND ekwipunek.Idkreatury=kreatura.Idkreatury GROUP BY wyprawa.nazwa; 
+
+WORKBENCH//Piątek
+PHP_MY_ADMIN// Piątek 

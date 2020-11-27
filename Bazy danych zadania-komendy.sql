@@ -176,7 +176,7 @@ SELECT kreatura.nazwa,kreatura.Idkreatury,ekwipunek.Idkreatury FROM kreatura LEF
 #punkt 1
 SELECT kreatura.nazwa,zasob.nazwa FROM kreatura NATURAL JOIN ekwipunek INNER JOIN zasob ON zasob.idzasobu = ekwipunek.idzasobu WHERE YEAR(kreatura.dataUr) BETWEEN 1670 AND 1679 AND kreatura.rodzaj='wiking'; 
 #punkt 2
-Select kreatura.nazwa,zasob.nazwa from kreatura NATURAL JOIN ekwipunek INNER JOIN zasob ON zasob.idzasobu = ekwipunek.idzasobu WHERE zasob.rodzaj='jedzenie' ORDER BY kreatura.dataUr DESC LIMIT 5;
+SELECT kreatura.nazwa,zasob.nazwa from kreatura NATURAL JOIN ekwipunek INNER JOIN zasob ON zasob.idzasobu = ekwipunek.idzasobu WHERE zasob.rodzaj='jedzenie' ORDER BY kreatura.dataUr DESC LIMIT 5;
 #punkt 3 
 SELECT CONCAT(T2.nazwa,"-",T1.nazwa) FROM kreatura T1 , kreatura T2 WHERE ABS(T1.Idkreatury-T2.Idkreatury=5) ;
 #Zadanie 5 
@@ -191,13 +191,22 @@ CREATE TABLE kreatura2 SELECT * FROM wikingowie.kreatura;
 CREATE TABLE uczestnicy2 SELECT * FROM wikingowie.uczestnicy;
 CREATE TABLE etapy_wyprawy2 SELECT * FROM wikingowie.etapy_wyprawy;
 CREATE TABLE sektor2 SELECT * FROM wikingowie.sektor;
-CREATE TABLE wyprawa2 Select * form wikingowie.wyprawa
+CREATE TABLE wyprawa2 SELECT * FROM wikingowie.wyprawa;
 #punkt 2 
 SELECT kreatura.nazwa ,uczestnicy.id_uczestnika FROM kreatura LEFT JOIN uczestnicy ON uczestnicy.id_uczestnika=kreatura.Idkreatury where uczestnicy.id_uczestnika IS NULL;
 #punkt 3 
 SELECT wyprawa.nazwa,SUM(ekwipunek.ilosc) FROM wyprawa  INNER JOIN uczestnicy ON uczestnicy.id_wyprawy=wyprawa.id_wyprawy INNER JOIN kreatura ON uczestnicy.id_uczestnika=kreatura.IdKreatury INNER JOIN ekwipunek ON ekwipunek.Idkreatury=kreatura.Idkreatury GROUP BY wyprawa.nazwa; 
 Lub
 SELECT wyprawa.nazwa,SUM(ekwipunek.ilosc) FROM wyprawa,uczestnicy,ekwipunek,kreatura WHERE wyprawa.id_wyprawy=uczestnicy.id_wyprawy AND uczestnicy.id_uczestnika=kreatura.Idkreatury AND ekwipunek.Idkreatury=kreatura.Idkreatury GROUP BY wyprawa.nazwa; 
+#Zadanie 2
+#punkt 1
+SELECT wyprawa.nazwa,COUNT(uczestnicy.id_uczestnika),GROUP_CONCAT(kreatura.nazwa) FROM kreatura,wyprawa,uczestnicy WHERE kreatura.Idkreatury=uczestnicy.id_uczestnika AND wyprawa.id_wyprawy=uczestnicy.id_wyprawy GROUP BY wyprawa.nazwa;
+#punkt 2 
+SELECT etapy_wyprawy.sektor,wyprawa.nazwa,sektor.nazwa,wyprawa.kierownik,kreatura.nazwa, wyprawa.data_rozpoczecia FROM etapy_wyprawy,sektor,kreatura,wyprawa,uczestnicy where etapy_wyprawy.sektor=sektor.id_sektora AND etapy_wyprawy.idWyprawy=wyprawa.id_wyprawy AND uczestnicy.id_wyprawy=wyprawa.id_wyprawy AND kreatura.IdKreatury = uczestnicy.id_uczestnika AND id_uczestnika=wyprawa.kierownik ORDER BY wyprawa.data_rozpoczecia, etapy_wyprawy.kolejnosc;
+#Zadanie 3
+#punkt 1
+SELECT sektor.nazwa,COUNT(etapy_wyprawy.sektor) AS ilosc_odwiedzin FROM sektor LEFT JOIN etapy_wyprawy ON sektor.id_sektora=etapy_wyprawy.sektor GROUP BY sektor.nazwa ;
+#punkt 2 
+SELECT DISTINCT(kreatura.nazwa),IF(uczestnicy.id_wyprawy IS NULL,"Nie bral udzialu w wyprawie","bral udzialu w wyprawie") FROM kreatura LEFT JOIN uczestnicy ON kreatura.Idkreatury=uczestnicy.id_uczestnika   ORDER BY kreatura.nazwa;
 
-WORKBENCH//Piątek
-PHP_MY_ADMIN// Piątek 
+Biblioteka //

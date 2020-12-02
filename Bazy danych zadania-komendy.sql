@@ -208,5 +208,16 @@ SELECT etapy_wyprawy.sektor,wyprawa.nazwa,sektor.nazwa,wyprawa.kierownik,kreatur
 SELECT sektor.nazwa,COUNT(etapy_wyprawy.sektor) AS ilosc_odwiedzin FROM sektor LEFT JOIN etapy_wyprawy ON sektor.id_sektora=etapy_wyprawy.sektor GROUP BY sektor.nazwa ;
 #punkt 2 
 SELECT DISTINCT(kreatura.nazwa),IF(uczestnicy.id_wyprawy IS NULL,"Nie bral udzialu w wyprawie","bral udzialu w wyprawie") FROM kreatura LEFT JOIN uczestnicy ON kreatura.Idkreatury=uczestnicy.id_uczestnika   ORDER BY kreatura.nazwa;
+#Zadanie 4 
+#punkt 1
+SELECT wyprawa.nazwa,SUM(LENGTH(etapy_wyprawy.dziennik)) FROM wyprawa,etapy_wyprawy WHERE etapy_wyprawy.idWyprawy=wyprawa.id_wyprawy GROUP BY wyprawa.nazwa HAVING SUM(LENGTH(etapy_wyprawy.dziennik))<400; 
+#punkt 2 
+SELECT wyprawa.nazwa,COUNT(DISTINCT(uczestnicy.id_uczestnika)),SUM(ekwipunek.ilosc*zasob.waga)/COUNT(DISTINCT(uczestnicy.id_uczestnika)) FROM wyprawa LEFT JOIN uczestnicy ON wyprawa.id_wyprawy = uczestnicy.id_wyprawy LEFT JOIN kreatura  ON uczestnicy.id_uczestnika = kreatura.idKreatury LEFT JOIN ekwipunek ON kreatura.idKreatury= ekwipunek.idKreatury LEFT JOIN zasob ON ekwipunek.idZasobu = zasob.idZasobu GROUP BY wyprawa.nazwa;
+#Zadanie 5 
+SELECT kreatura.nazwa,sektor.nazwa,datediff(wyprawa.data_rozpoczecia,kreatura.dataUR) from wyprawa,sektor,etapy_wyprawy,kreatura,uczestnicy where wyprawa.id_wyprawy=etapy_wyprawy.idWyprawy AND etapy_wyprawy.sektor=sektor.id_sektora AND wyprawa.id_wyprawy=uczestnicy.id_wyprawy AND uczestnicy.id_uczestnika=kreatura.Idkreatury AND sektor.nazwa = "Chatka dziadka";
+## LAB 6
+#Zadanie 1
+#punkt 1 
 
 Biblioteka //
+__projekt // Wymagania  

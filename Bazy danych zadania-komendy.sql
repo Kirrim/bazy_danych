@@ -192,6 +192,8 @@ CREATE TABLE uczestnicy2 SELECT * FROM wikingowie.uczestnicy;
 CREATE TABLE etapy_wyprawy2 SELECT * FROM wikingowie.etapy_wyprawy;
 CREATE TABLE sektor2 SELECT * FROM wikingowie.sektor;
 CREATE TABLE wyprawa2 SELECT * FROM wikingowie.wyprawa;
+CREATE TABLE ekwipunek2 SELECT * FROM wikingowie.ekwipunek;
+CREATE TABLE zasob2 SELECT * FROM wikingowie.zasob;
 #punkt 2 
 SELECT kreatura.nazwa ,uczestnicy.id_uczestnika FROM kreatura LEFT JOIN uczestnicy ON uczestnicy.id_uczestnika=kreatura.Idkreatury where uczestnicy.id_uczestnika IS NULL;
 #punkt 3 
@@ -218,6 +220,52 @@ SELECT kreatura.nazwa,sektor.nazwa,datediff(wyprawa.data_rozpoczecia,kreatura.da
 ## LAB 6
 #Zadanie 1
 #punkt 1 
+DELIMITER //
+CREATE TRIGGER kreatura_waga
+BEFORE INSERT ON kreatura2
+FOR EACH ROW
+BEGIN
+  IF NEW.waga < 0
+  THEN
+    SET NEW.waga = 0;
+  END IF;
+END
+//
+DELIMITER ;
+#Zadanie 2
+#punkt 1
+DELIMITER $$
+CREATE TRIGGER archiwum_wypraw
+BEFORE DELETE ON wyprawa2
+FOR EACH ROW
+BEGIN
+INSERT INTO archiwum_wypraw SELECT wyprawa2.id_wyprawy,wyprawa2.nazwa,wyprawa2.data_rozpoczecia,wyprawa2.data_zakonczenia,kreatura2.nazwa FROM wyprawa2 
+JOIN kreatura2 ON kreatura2.idKreatury=wyprawa2.kierownik where id_wyprawy=old.id_wyprawy; 
+END
+$$
+DELIMITER ;
+INSERT INTO wyprawa2 VALUES("5","TEST","2000-01-01","2000-02-02","1");
+DELETE FROM wyprawa2 where id_wyprawy='5';
+                                                                     //DROP TRIGGER archiwum_wypraw;
+                                                                     //SET SQL_SAFE_UPDATES = 0;
+#Zadanie 3 
+#punkt 1
+DELIMITER \\
+CREATE PROCEDURE eliksir_sily(IN id int)
+BEGIN
+UPDATE kreatura SET udzwig = 1.2 * udzwig WHERE idKreatury = id;
+END
+\\
+#punkt 2
+DELIMITER $$
+CREATE FUNCTION wielka()
+    RETURNS varchar(255)
+BEGIN
+    DECLARE text VARCHAR(255);
+    SELECT UPPER(@text) ;
+    RETURN @text;
+END $$
+DELIMITER ;
 
 Biblioteka //
 __projekt // Wymagania  

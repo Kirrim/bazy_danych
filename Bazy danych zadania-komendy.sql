@@ -258,14 +258,44 @@ END
 \\
 #punkt 2
 DELIMITER $$
-CREATE FUNCTION wielka()
-    RETURNS varchar(255)
+CREATE FUNCTION wielka(tekst varchar(100))
+    RETURNS varchar(100)
 BEGIN
-    DECLARE text VARCHAR(255);
-    SELECT UPPER(@text) ;
-    RETURN @text;
-END $$
+    DECLARE duze varchar(100)
+    SELECT UPPER(tekst) into @duze;
+    RETURN @duze;
+END 
+$$
 DELIMITER ;
-
+ //DROP FUNCTION wielka;
+#Zadanie 4
+#punkt 1 
+CREATE TABLE  system_alarmowy(id_alarmu INT AUTO_INCREMENT,wiadomosc varchar(150) );
+#punkt 2 
+DELIMITER $$
+CREATE TRIGGER tesciowa_alert
+AFTER INSERT ON wyprawa
+FOR EACH ROW 
+BEGIN
+DECLARE t int ;
+SELECT count(kreatura.idKreatury) INTO t FROM kreatura INNER JOIN wyprawa ON kreatura.IdKreatury=wyprawa.kierownik INNER JOIN etapy_wyprawy ON wyprawa.id_wyprawy=etapy_wyprawy.idWyprawy INNER JOIN sektor ON sektor.id_sektora=etapy_wyprawy.sektor where sektor =7 
+AND kreatura.nazwa='tesciowa'
+AND wyprawa.id_wyprawy=NEW.id_wyprawy;
+IF t > 0
+THEN 
+INSERT into system_alarmowy values(DEFAULT,'Tesciowa nadchodzi !');
+END IF;
+END
+$$
+DELIMITER;
+#Zadanie 5
+#punkt 1 
+DELIMITER $$
+CREATE PROCEDURE udzwig(OUT srednia float , OUT suma float , OUT maks float)
+BEGIN
+SELECT AVG(udzwig),SUM(udzwig),MAX(udzwig) INTO srednia,suma,maks from kreatura;
+END
+$$
+DELIMITER ;
 Biblioteka //
 __projekt // Wymagania  

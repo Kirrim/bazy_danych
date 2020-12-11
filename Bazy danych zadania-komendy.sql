@@ -297,5 +297,47 @@ SELECT AVG(udzwig),SUM(udzwig),MAX(udzwig) INTO srednia,suma,maks from kreatura;
 END
 $$
 DELIMITER ;
+#LAB2 REPO
+#Zadania - część 2
+#punkt 1
+SELECT pracownik.imie,pracownik.nazwisko,dzial.nazwa FROM pracownik INNER JOIN dzial ON pracownik.dzial=dzial.id_dzialu;
+#punkt 2 
+SELECT towar.nazwa_towaru,kategoria.nazwa_kategori,stan_magazynowy.ilosc FROM towar INNER JOIN kategoria ON towar.kategoria=kategoria.id_kategori INNER JOIN stan_magazynowy ON towar.id_towaru=stan_magazynowy.towar ORDER BY stan_magazynowy.ilosc DESC;
+#punkt 3 
+SELECT status_zamowienia.nazwa_statusu_zamowienia,zamowienie.id_zamowienia from zamowienie INNER JOIN status_zamowienia ON status_zamowienia.id_statusu_zamowienia=zamowienie.status_zamowienia WHERE id_statusu_zamowienia=6;
+#punkt 4 
+SELECT klient.id_klienta,adres_klienta.miejscowosc from klient INNER JOIN  adres_klienta on klient.id_klienta=adres_klienta.klient JOIN typ_adresu  ON adres_klienta.typ_adresu=typ_adresu.id_typu where adres_klienta.miejscowosc="Olsztyn" and typ_adresu.nazwa="podstawowy";
+#punkt 5 
+SELECT jednostka_miary.nazwa,stan_magazynowy.towar from jednostka_miary LEFT JOIN stan_magazynowy ON stan_magazynowy.jm=jednostka_miary.id_jednostki WHERE stan_magazynowy.towar IS NULL;
+#punkt 6 
+SELECT zamowienie.numer_zamowienia,pozycja_zamowienia.cena,kategoria.nazwa_kategori,pozycja_zamowienia.ilosc FROM zamowienie INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.id_zamowienia INNER JOIN towar ON towar.id_towaru=pozycja_zamowienia.towar INNER JOIN kategoria ON towar.kategoria=kategoria.id_kategori  where  year(zamowienie.data_zamowienia)=2018; 
+#punkt 8 
+SELECT pozycja_zamowienia.*,zamowienie.data_zamowienia FROM zamowienie INNER JOIN pozycja_zamowienia ON zamowienie.id_zamowienia=pozycja_zamowienia.zamowienie ORDER BY data_zamowienia Limit 5;
+#punkt 9 
+SELECT status_zamowienia.nazwa_statusu_zamowienia,zamowienie.id_zamowienia from zamowienie INNER JOIN status_zamowienia ON status_zamowienia.id_statusu_zamowienia=zamowienie.status_zamowienia WHERE status_zamowienia.id_statusu_zamowienia!=5;
+#punkt 10 
+SELECT * FROM adres_klienta where kod NOT LIKE "__-___"; 
+SELECT * FROM adres_klienta where kod NOT REGEXP '[0-9]{2}-[0-9]{3}';
+#LAB3 REPO
+#Zadania
+#punkt 1
+SELECT imie,nazwisko,year(data_urodzenia) FROM pracownik;
+#punkt 2
+SELECT imie,nazwisko,2020-year(data_urodzenia) FROM pracownik;
+#punkt 3 
+SELECT dzial.nazwa,COUNT(pracownik.Id_pracownika) FROM pracownik INNER JOIN dzial ON pracownik.dzial=dzial.id_dzialu GROUP BY dzial.id_dzialu;
+#punkt 4
+SELECT kategoria.nazwa_kategori,COUNT(DISTINCT(towar.nazwa_towaru)) FROM kategoria INNER JOIN towar ON towar.kategoria=kategoria.id_kategori  where towar.kategoria=id_kategori Group by id_kategori ;
+#punkt 5
+  SELECT GROUP_CONCAT(kategoria.nazwa_kategori,'-',towar.nazwa_towaru) FROM kategoria INNER JOIN towar ON towar.kategoria=kategoria.id_kategori  where towar.kategoria=id_kategori  ;
+#punkt 6
+ SELECT Round(SUM(pensja)/count(pensja),2) FROM pracownik;
+punkt 7
+SELECT id_pracownika, AVG(pensja), TIMESTAMPDIFF(YEAR, data_zatrudnienia, CURDATE()) AS staz FROM pracownik
+WHERE TIMESTAMPDIFF(YEAR, data_zatrudnienia, CURDATE()) > 5
+GROUP BY id_pracownika;#punkt 8
+#punkt 9
+#punkt 10
+#punkt
 Biblioteka //
 __projekt // Wymagania  

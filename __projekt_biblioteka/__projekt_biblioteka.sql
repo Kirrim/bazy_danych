@@ -382,8 +382,8 @@ CREATE FUNCTION ilosc_ksiazek()
     RETURNS INTEGER
 BEGIN
     DECLARE ile INT;
-    SELECT SUM(ilosc) INTO @ile FROM __projekt_ksiazka;
-    RETURN @ile;
+    SELECT SUM(ilosc) INTO ile FROM __projekt_ksiazka;
+    RETURN ile;
 END 
 //
 DELIMITER ;

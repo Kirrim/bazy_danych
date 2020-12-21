@@ -297,7 +297,7 @@ SELECT AVG(udzwig),SUM(udzwig),MAX(udzwig) INTO srednia,suma,maks from kreatura;
 END
 $$
 DELIMITER ;
-#LAB2 REPO
+#LAB REPO
 #Zadania - część 2
 #punkt 1
 SELECT pracownik.imie,pracownik.nazwisko,dzial.nazwa FROM pracownik INNER JOIN dzial ON pracownik.dzial=dzial.id_dzialu;
@@ -333,11 +333,35 @@ SELECT kategoria.nazwa_kategori,COUNT(DISTINCT(towar.nazwa_towaru)) FROM kategor
 #punkt 6
  SELECT Round(SUM(pensja)/count(pensja),2) FROM pracownik;
 punkt 7
-SELECT id_pracownika, AVG(pensja), TIMESTAMPDIFF(YEAR, data_zatrudnienia, CURDATE()) AS staz FROM pracownik
-WHERE TIMESTAMPDIFF(YEAR, data_zatrudnienia, CURDATE()) > 5
-GROUP BY id_pracownika;#punkt 8
+SELECT  AVG(pensja) FROM pracownik WHERE TIMESTAMPDIFF(YEAR, data_zatrudnienia, CURDATE()) > 5;
+#punkt 8
+SELECT towar.nazwa_towaru,COUNT(pozycja_zamowienia.towar) FROM pozycja_zamowienia inner JOIN towar on pozycja_zamowienia.towar=towar.id_towaru GROUP BY towar.id_towaru ORDER BY COUNT(pozycja_zamowienia.towar) DESC LIMIT 10;
 #punkt 9
+SELECT zamowienie.data_zamowienia,zamowienie.numer_zamowienia,SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) FROM  pozycja_zamowienia  INNER JOIN zamowienie ON zamowienie.status_zamowienia=zamowienie where YEAR(zamowienie.data_zamowienia)=2017 AND QUARTER(data_zamowienia)=1 GROUP BY zamowienie.id_zamowienia;
 #punkt 10
-#punkt
+SELECT pracownik.imie,pracownik.nazwisko,SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) FROM pracownik INNER JOIN zamowienie ON zamowienie.pracownik_Id_pracownika=pracownik.Id_pracownika INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.status_zamowienia GROUP BY pracownik.Id_pracownika order by SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena)  desc ;
+#LAB3 REPO
+#Zadania cześć 2 
+#punkt 1
+SELECT dzial.nazwa,min(pracownik.pensja),AVG(pracownik.pensja),MAX(pracownik.pensja) FROM dzial INNER JOIN pracownik ON pracownik.dzial=dzial.id_dzialu Group by pracownik.dzial;
+#punkt 2 
+SELECT klient.pelna_nazwa,SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) AS wartosc FROM klient INNER JOIN zamowienie ON zamowienie.klient=klient.id_klienta INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.id_zamowienia GROUP BY zamowienie.id_zamowienia ORDER BY wartosc DESC LIMIT 10 ; 
+#punkt 3
+SELECT SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) as wartosc,YEAR(zamowienie.data_zamowienia) AS rok FROM zamowienie INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.id_zamowienia GROUP BY rok ORDER BY wartosc DESC ;
+#punkt 4
+SELECT SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) as wartosc,status_zamowienia.nazwa_statusu_zamowienia FROM zamowienie INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.id_zamowienia INNER JOIN status_zamowienia  ON status_zamowienia.id_statusu_zamowienia=zamowienie.status_zamowienia WHERE nazwa_statusu_zamowienia="anulowane";
+#punkt 5
+SELECT adres_klienta.miejscowosc,sum(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) as wartosc,count(distinct(zamowienie.id_zamowienia)) FROM klient INNER JOIN zamowienie ON zamowienie.klient=klient.id_klienta INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.id_zamowienia INNER JOIN adres_klienta ON klient.id_klienta=adres_klienta.klient INNER JOIN typ_adresu ON typ_adresu.id_typu=adres_klienta.typ_adresu WHERE adres_klienta.typ_adresu='1' group by adres_klienta.miejscowosc with rollup;
+#punkt 6
+SELECT SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) as przychod,SUM(towar.cena_zakupu*pozycja_zamowienia.ilosc) as wydatki,SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena)-SUM(towar.cena_zakupu*pozycja_zamowienia.ilosc) as dochod,status_zamowienia.nazwa_statusu_zamowienia FROM zamowienie INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.id_zamowienia INNER JOIN towar ON towar.id_towaru=pozycja_zamowienia.towar  INNER JOIN status_zamowienia  ON status_zamowienia.id_statusu_zamowienia=zamowienie.status_zamowienia WHERE nazwa_statusu_zamowienia="zrealizowane";
+#punkt 7
+SELECT SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena) as przychod,SUM(towar.cena_zakupu*pozycja_zamowienia.ilosc) as wydatki,SUM(pozycja_zamowienia.ilosc*pozycja_zamowienia.cena)-SUM(towar.cena_zakupu*pozycja_zamowienia.ilosc) as dochod  ,YEAR(zamowienie.data_zamowienia) AS rok FROM zamowienie INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.zamowienie=zamowienie.id_zamowienia INNER JOIN towar ON towar.id_towaru=pozycja_zamowienia.towar GROUP BY rok;
+#punkt 8 
+SELECT SUM(towar.cena_zakupu*stan_magazynowy.ilosc) as wartosc,kategoria.nazwa_kategori FROM towar INNER JOIN pozycja_zamowienia ON pozycja_zamowienia.towar=towar.id_towaru INNER JOIN stan_magazynowy ON stan_magazynowy.towar=towar.id_towaru INNER JOIN kategoria ON kategoria.id_kategori=towar.kategoria GROUP BY kategoria.id_kategori;
+#punkt 9
+SELECT MONTHNAME(data_urodzenia) as miesiac,COUNT(MONTH(data_urodzenia)) as ilosc FROM pracownik  GROUP BY miesiac,Month(data_urodzenia) ORDER BY Month(data_urodzenia);
+#punkt 10 
+Select pracownik.imie,pracownik.nazwisko,TIMESTAMPDIFF(MONTH,pracownik.data_zatrudnienia,CURDATE())*pracownik.pensja FROM pracownik;
 Biblioteka //
 __projekt // Wymagania  
+ENUM("romans", "kryminal", "fantastyka", "science fiction", "horror", "literatura piekna", "dramat", "thriller", "powiesc przygodowa", "komiks", "literatura popularnonaukowa", "biografia", "powiesc historyczna", "literatura faktu", "literatura podroznicza","literatura naukowa")
